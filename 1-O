@@ -1,0 +1,4 @@
+O(1)    // best case
+O(n^2)  // average case
+O(n^2)  // worst case
+
