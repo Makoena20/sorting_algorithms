@@ -38,7 +38,20 @@ void print_array(const int *array, size_t size);
 void shell_sort(int *array, size_t size);
 
 void print_list(const listint_t *list);
-void cocktail_sort_list(listint_t **list); 
+void cocktail_sort_list(listint_t **list);
+
+void print_array(const int *array, size_t size);
+void counting_sort(int *array, size_t size);
+
+
+/* Provided print_array function */
+void print_array(const int *array, size_t size);
+
+/* Function prototype for counting sort */
+void counting_sort(int *array, size_t size);
+
+void print_array(const int *array, size_t size);
+void merge_sort(int *array, size_t size);
 
 #endif /* SORT_H */
 
