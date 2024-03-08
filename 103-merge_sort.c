@@ -1,53 +1,83 @@
-#include "sort.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "sort.h"
 
-void merge(int *array, int *left, int left_size, int *right, int right_size) {
-    int i = 0, j = 0, k = 0;
+/**
+ * merge - merge function for merge sort
+ * @array: array to merge
+ * @left: left index
+ * @middle: middle index
+ * @right: right index
+ * @tmp_array: temporary array to store merged result
+ **/
+void merge(int *array, size_t left, size_t middle, size_t right, int *tmp_array)
+{
+    size_t i = left, j = middle, k = 0;
 
-    while (i < left_size && j < right_size) {
-        if (left[i] <= right[j]) {
-            array[k] = left[i];
-            i++;
-        } else {
-            array[k] = right[j];
-            j++;
-        }
-        k++;
+    printf("Merging...\n");
+    printf("[left]: ");
+    print_array(array + left, middle - left);
+    printf("[right]: ");
+    print_array(array + middle, right - middle);
+
+    while (i < middle && j < right)
+    {
+        if (array[i] < array[j])
+            tmp_array[k++] = array[i++];
+        else
+            tmp_array[k++] = array[j++];
     }
+    while (i < middle)
+        tmp_array[k++] = array[i++];
+    while (j < right)
+        tmp_array[k++] = array[j++];
+    for (i = left, k = 0; i < right; ++i, ++k)
+        array[i] = tmp_array[k];
 
-    while (i < left_size) {
-        array[k] = left[i];
-        i++;
-        k++;
-    }
-
-    while (j < right_size) {
-        array[k] = right[j];
-        j++;
-        k++;
-    }
+    printf("[Done]: ");
+    print_array(array + left, right - left);
 }
 
-void merge_sort(int *array, size_t size) {
-    if (size > 1) {
-        int mid = size / 2;
-        int *left = array;
-        int *right = array + mid;
-        int left_size = mid;
-        int right_size = size - mid;
+/**
+ * merge_sort_recursive - recursive merge sort function
+ * @array: array to sort
+ * @left: left index
+ * @right: right index
+ * @tmp_array: temporary array to store merged result
+ **/
+void merge_sort_recursive(int *array, size_t left, size_t right, int *tmp_array)
+{
+    size_t middle;
 
-        merge_sort(left, left_size);
-        merge_sort(right, right_size);
+    if (right - left <= 1)
+        return;
 
-        printf("Merging...\n[left]: ");
-        print_array(left, left_size);
-        printf("[right]: ");
-        print_array(right, right_size);
+    middle = left + (right - left) / 2;
 
-        merge(array, left, left_size, right, right_size);
-
-        printf("[Done]: ");
-        print_array(array, size);
-    }
+    merge_sort_recursive(array, left, middle, tmp_array);
+    merge_sort_recursive(array, middle, right, tmp_array);
+    merge(array, left, middle, right, tmp_array);
 }
+
+/**
+ * merge_sort - sorts an array of integers in ascending order using the
+ *              merge sort algorithm
+ * @array: array to sort
+ * @size: size of the array
+ **/
+void merge_sort(int *array, size_t size)
+{
+    int *tmp_array;
+
+    if (size < 2 || !array)
+        return;
+
+    tmp_array = malloc(size * sizeof(int));
+    if (!tmp_array)
+        return;
+
+    merge_sort_recursive(array, 0, size, tmp_array);
+
+    free(tmp_array);
+}
+
