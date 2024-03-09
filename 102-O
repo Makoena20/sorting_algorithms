@@ -1,3 +1,4 @@
-Best case: O(n + k)
-Average case: O(n + k)
-Worst case: O(n + k)
+O(2n + k)
+O(2n + k)
+O(2n + k)
+
