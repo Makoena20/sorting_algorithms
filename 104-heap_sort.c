@@ -1,63 +1,57 @@
 #include "sort.h"
+#include <stdio.h>
 
 /**
- * swap - Swaps two integers in an array
- * @a: Pointer to the first integer
- * @b: Pointer to the second integer
- */
-void swap(int *a, int *b)
-{
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-/**
- * sift_down - Performs the sift-down operation on a heap
- * @array: Array to be sorted
+ * sift_down - Perform sift-down operation on a heap
+ * @array: Array representing the heap
  * @size: Size of the array
- * @root: Index of the root of the heap
- * @end: Index marking the end of the heap
+ * @root: Index of the root of the subtree to sift down
+ * @total_size: Total size of the heap
  */
-void sift_down(int *array, size_t size, size_t root, size_t end)
+void sift_down(int *array, size_t size, size_t root, size_t total_size)
 {
-    size_t max = root;
-    size_t left = 2 * root + 1;
-    size_t right = 2 * root + 2;
+    size_t max, left_child, right_child;
+    int temp;
 
-    if (left < end && array[left] > array[max])
-        max = left;
-
-    if (right < end && array[right] > array[max])
-        max = right;
-
-    if (max != root)
+    while ((left_child = 2 * root + 1) < total_size)
     {
-        swap(&array[root], &array[max]);
+        max = left_child;
+        right_child = left_child + 1;
+        if (right_child < total_size && array[right_child] > array[max])
+            max = right_child;
+        if (array[root] >= array[max])
+            break;
+        temp = array[root];
+        array[root] = array[max];
+        array[max] = temp;
         print_array(array, size);
-        sift_down(array, size, max, end);
+        root = max;
     }
 }
 
 /**
  * heap_sort - Sorts an array of integers in ascending order using Heap sort algorithm
- * @array: Array to be sorted
- * @size: Size of the array
+ * @array: The array to be sorted
+ * @size: Number of elements in @array
  */
 void heap_sort(int *array, size_t size)
 {
+    int temp;
+    size_t i;
+
     if (array == NULL || size < 2)
         return;
 
-    int i;
+    for (i = size / 2 - 1; (int)i >= 0; i--)
+        sift_down(array, size, i, size);
 
-    for (i = (int)size / 2 - 1; i >= 0; i--)
-        sift_down(array, size, (size_t)i, size);
-
-    for (i = (int)size - 1; i > 0; i--)
+    for (i = size - 1; i > 0; i--)
     {
-        swap(&array[0], &array[i]);
+        temp = array[i];
+        array[i] = array[0];
+        array[0] = temp;
         print_array(array, size);
-        sift_down(array, size, 0, (size_t)i);
+        sift_down(array, size, 0, i);
     }
 }
+
