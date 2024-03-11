@@ -71,5 +71,10 @@ void heap_sort(int *array, size_t size);
 void print_array(const int *array, size_t size);
 void radix_sort(int *array, size_t size);
 
+void print_array(const int *array, size_t size);
+void quick_sort_hoare(int *array, size_t size);
+int hoare_partition(int *array, size_t size, int low, int high);
+void swap(int *a, int *b);
+
 #endif /* SORT_H */
 
